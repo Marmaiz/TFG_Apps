@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+        <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="PedidosService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Annotation Term="Core.Links">
+                <Collection>
+                    <Record>
+                        <PropertyValue Property="rel" String="author"/>
+                        <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+                    </Record>
+                </Collection>
+            </Annotation>
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Pedido" EntityType="PedidosService.Pedido">
+                    <NavigationPropertyBinding Path="Cliente" Target="Cliente"/>
+                    <NavigationPropertyBinding Path="Estado" Target="Estado"/>
+                    <NavigationPropertyBinding Path="Lineas" Target="Linea"/>
+                </EntitySet>
+                <EntitySet Name="Entrada" EntityType="PedidosService.Entrada">
+                    <NavigationPropertyBinding Path="Socio" Target="Socio"/>
+                    <NavigationPropertyBinding Path="Calibre" Target="Calibre"/>
+                    <NavigationPropertyBinding Path="Producto" Target="Producto"/>
+                    <NavigationPropertyBinding Path="Variedad" Target="Variedad"/>
+                    <NavigationPropertyBinding Path="Estado" Target="Estado"/>
+                    <NavigationPropertyBinding Path="toLineas" Target="Trazabilidad"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Entrada"/>
+                </EntitySet>
+                <EntitySet Name="Linea" EntityType="PedidosService.Linea">
+                    <NavigationPropertyBinding Path="Producto" Target="Producto"/>
+                    <NavigationPropertyBinding Path="Variedad" Target="Variedad"/>
+                    <NavigationPropertyBinding Path="Calibre" Target="Calibre"/>
+                    <NavigationPropertyBinding Path="Caja" Target="Caja"/>
+                    <NavigationPropertyBinding Path="Pedido" Target="Pedido"/>
+                    <NavigationPropertyBinding Path="toEntradas" Target="Trazabilidad"/>
+                </EntitySet>
+                <EntitySet Name="Trazabilidad" EntityType="PedidosService.Trazabilidad">
+                    <NavigationPropertyBinding Path="Linea" Target="Linea"/>
+                    <NavigationPropertyBinding Path="Entrada" Target="Entrada"/>
+                </EntitySet>
+                <EntitySet Name="Cliente" EntityType="PedidosService.Cliente"/>
+                <EntitySet Name="Socio" EntityType="PedidosService.Socio"/>
+                <EntitySet Name="Calibre" EntityType="PedidosService.Calibre">
+                    <NavigationPropertyBinding Path="Producto" Target="Producto"/>
+                </EntitySet>
+                <EntitySet Name="Caja" EntityType="PedidosService.Caja"/>
+                <EntitySet Name="Producto" EntityType="PedidosService.Producto"/>
+                <EntitySet Name="Variedad" EntityType="PedidosService.Variedad">
+                    <NavigationPropertyBinding Path="Producto" Target="Producto"/>
+                </EntitySet>
+                <EntitySet Name="Estado" EntityType="PedidosService.Estado">
+                    <NavigationPropertyBinding Path="texts" Target="Estado_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="Estado_texts"/>
+                </EntitySet>
+                <EntitySet Name="Estado_texts" EntityType="PedidosService.Estado_texts"/>
+            </EntityContainer>
+            <EntityType Name="Pedido">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="Cliente" Type="PedidosService.Cliente">
+                    <ReferentialConstraint Property="Cliente_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Cliente_Id" Type="Edm.Guid"/>
+                <Property Name="Fecha_Pedido" Type="Edm.Date"/>
+                <NavigationProperty Name="Estado" Type="PedidosService.Estado">
+                    <ReferentialConstraint Property="Estado_code" ReferencedProperty="code"/>
+                </NavigationProperty>
+                <Property Name="Estado_code" Type="Edm.String" DefaultValue="C"/>
+                <NavigationProperty Name="Lineas" Type="Collection(PedidosService.Linea)" Partner="Pedido">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Entrada">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="Socio" Type="PedidosService.Socio">
+                    <ReferentialConstraint Property="Socio_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Socio_Id" Type="Edm.Guid"/>
+                <Property Name="Fecha_recogida" Type="Edm.Date"/>
+                <Property Name="Kilos" Type="Edm.Int32"/>
+                <Property Name="Kilos_disponibles" Type="Edm.Int32"/>
+                <Property Name="Kilos_Merma" Type="Edm.Int32" DefaultValue="0"/>
+                <NavigationProperty Name="Calibre" Type="PedidosService.Calibre">
+                    <ReferentialConstraint Property="Calibre_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Calibre_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Producto" Type="PedidosService.Producto">
+                    <ReferentialConstraint Property="Producto_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Producto_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Variedad" Type="PedidosService.Variedad">
+                    <ReferentialConstraint Property="Variedad_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Variedad_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Estado" Type="PedidosService.Estado">
+                    <ReferentialConstraint Property="Estado_code" ReferencedProperty="code"/>
+                </NavigationProperty>
+                <Property Name="Estado_code" Type="Edm.String" DefaultValue="D"/>
+                <NavigationProperty Name="toLineas" Type="Collection(PedidosService.Trazabilidad)" Partner="Entrada"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="PedidosService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="PedidosService.Entrada"/>
+                <Property Name="DraftMessages" Type="Collection(PedidosService.DRAFT_DraftAdministrativeData_DraftMessage)" Nullable="true"/>
+            </EntityType>
+            <EntityType Name="Linea">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="Producto" Type="PedidosService.Producto">
+                    <ReferentialConstraint Property="Producto_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Producto_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Variedad" Type="PedidosService.Variedad">
+                    <ReferentialConstraint Property="Variedad_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Variedad_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Calibre" Type="PedidosService.Calibre">
+                    <ReferentialConstraint Property="Calibre_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Calibre_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Caja" Type="PedidosService.Caja">
+                    <ReferentialConstraint Property="Caja_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Caja_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Pedido" Type="PedidosService.Pedido" Partner="Lineas">
+                    <ReferentialConstraint Property="Pedido_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Pedido_Id" Type="Edm.Guid"/>
+                <Property Name="Kilos" Type="Edm.Int32"/>
+                <NavigationProperty Name="toEntradas" Type="Collection(PedidosService.Trazabilidad)" Partner="Linea"/>
+            </EntityType>
+            <EntityType Name="Trazabilidad">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="Linea" Type="PedidosService.Linea" Partner="toEntradas">
+                    <ReferentialConstraint Property="Linea_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Linea_Id" Type="Edm.Guid"/>
+                <NavigationProperty Name="Entrada" Type="PedidosService.Entrada" Partner="toLineas">
+                    <ReferentialConstraint Property="Entrada_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Entrada_Id" Type="Edm.Guid"/>
+                <Property Name="Kilos_Usados" Type="Edm.Int32"/>
+                <Property Name="Kilos_Merma" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="Cliente">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="50"/>
+                <Property Name="CIF" Type="Edm.String" MaxLength="10"/>
+                <Property Name="Direccion" Type="Edm.String" MaxLength="100"/>
+                <Property Name="Telefono" Type="Edm.String" MaxLength="10"/>
+            </EntityType>
+            <EntityType Name="Socio">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="50"/>
+                <Property Name="CIF" Type="Edm.String" MaxLength="10"/>
+                <Property Name="Direccion" Type="Edm.String" MaxLength="100"/>
+                <Property Name="Telefono" Type="Edm.String" MaxLength="10"/>
+            </EntityType>
+            <EntityType Name="Calibre">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="50"/>
+                <Property Name="Peso_Aprox_Pieza" Type="Edm.String" MaxLength="20"/>
+                <NavigationProperty Name="Producto" Type="PedidosService.Producto">
+                    <ReferentialConstraint Property="Producto_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Producto_Id" Type="Edm.Guid"/>
+            </EntityType>
+            <EntityType Name="Caja">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="50"/>
+                <Property Name="Peso" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="Producto">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+            <EntityType Name="Variedad">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Nombre" Type="Edm.String" MaxLength="100"/>
+                <NavigationProperty Name="Producto" Type="PedidosService.Producto">
+                    <ReferentialConstraint Property="Producto_Id" ReferencedProperty="Id"/>
+                </NavigationProperty>
+                <Property Name="Producto_Id" Type="Edm.Guid"/>
+            </EntityType>
+            <EntityType Name="Estado">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <NavigationProperty Name="texts" Type="Collection(PedidosService.Estado_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="PedidosService.Estado_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <EntityType Name="Estado_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+            </EntityType>
+            <ComplexType Name="DRAFT_DraftAdministrativeData_DraftMessage">
+                <Property Name="code" Type="Edm.String"/>
+                <Property Name="message" Type="Edm.String"/>
+                <Property Name="target" Type="Edm.String"/>
+                <Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="true"/>
+                <Property Name="transition" Type="Edm.Boolean"/>
+                <Property Name="numericSeverity" Type="Edm.Byte"/>
+                <Property Name="longtextUrl" Type="Edm.String"/>
+            </ComplexType>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="PedidosService.Entrada"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="PedidosService.Entrada"/>
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="PedidosService.Entrada"/>
+                <ReturnType Type="PedidosService.Entrada"/>
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="PedidosService.Entrada"/>
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+                <ReturnType Type="PedidosService.Entrada"/>
+            </Action>
+            <Annotations Target="PedidosService.EntityContainer">
+                <Annotation Term="Common.AddressViaNavigationPath" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Pedido/Estado_code">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Estado"/>
+                        <PropertyValue Property="CollectionPath" String="Estado"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="Estado_code"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada">
+                <Annotation Term="Common.SideEffects" Qualifier="alwaysFetchMessages">
+                    <Record Type="Common.SideEffectsType">
+                        <PropertyValue Property="SourceEntities">
+                            <Collection>
+                                <NavigationPropertyPath>
+                                </NavigationPropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>DraftMessages</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.Messages" Path="DraftMessages"/>
+            </Annotations>
+            <Annotations Target="PedidosService.EntityContainer/Entrada">
+                <Annotation Term="Common.DraftRoot">
+                    <Record Type="Common.DraftRootType">
+                        <PropertyValue Property="ActivationAction" String="PedidosService.draftActivate"/>
+                        <PropertyValue Property="EditAction" String="PedidosService.draftEdit"/>
+                        <PropertyValue Property="PreparationAction" String="PedidosService.draftPrepare"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.SideEffects" Qualifier="alwaysFetchMessages">
+                    <Record Type="Common.SideEffectsType">
+                        <PropertyValue Property="SourceEntities">
+                            <Collection>
+                                <NavigationPropertyPath>
+                                </NavigationPropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>DraftMessages</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/Estado_code">
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="Label" String="Estado"/>
+                        <PropertyValue Property="CollectionPath" String="Estado"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="Estado_code"/>
+                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/IsActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/HasActiveEntity">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/HasDraftEntity">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/DraftAdministrativeData">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Entrada/DraftMessages">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Linea/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Linea/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Linea/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Linea/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Linea/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Trazabilidad/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Cliente/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Socio/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Calibre/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Caja/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Producto/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Variedad/Id">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado">
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="name"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado/name">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado/descr">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado/code">
+                <Annotation Term="Validation.AllowedValues">
+                    <Collection>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Creado"/>
+                            <PropertyValue Property="Value" String="C"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="En_proceso"/>
+                            <PropertyValue Property="Value" String="P"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Finalizado"/>
+                            <PropertyValue Property="Value" String="F"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Vendido"/>
+                            <PropertyValue Property="Value" String="V"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Disponible"/>
+                            <PropertyValue Property="Value" String="D"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData">
+                <Annotation Term="Common.Label" String="Draft Administrative Data"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/DraftUUID">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft (Technical ID)"/>
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/CreationDateTime">
+                <Annotation Term="Common.Label" String="Draft Created On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/CreatedByUser">
+                <Annotation Term="Common.Label" String="Draft Created By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/DraftIsCreatedByMe">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft Created By Me"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/LastChangeDateTime">
+                <Annotation Term="Common.Label" String="Draft Last Changed On"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/LastChangedByUser">
+                <Annotation Term="Common.Label" String="Draft Last Changed By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/InProcessByUser">
+                <Annotation Term="Common.Label" String="Draft In Process By"/>
+            </Annotations>
+            <Annotations Target="PedidosService.DraftAdministrativeData/DraftIsProcessedByMe">
+                <Annotation Term="UI.Hidden" Bool="true"/>
+                <Annotation Term="Common.Label" String="Draft In Process By Me"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado_texts/locale">
+                <Annotation Term="Common.Label" String="Language Code"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado_texts/name">
+                <Annotation Term="Common.Label" String="Name"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado_texts/descr">
+                <Annotation Term="Common.Label" String="Description"/>
+            </Annotations>
+            <Annotations Target="PedidosService.Estado_texts/code">
+                <Annotation Term="Validation.AllowedValues">
+                    <Collection>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Creado"/>
+                            <PropertyValue Property="Value" String="C"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="En_proceso"/>
+                            <PropertyValue Property="Value" String="P"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Finalizado"/>
+                            <PropertyValue Property="Value" String="F"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Vendido"/>
+                            <PropertyValue Property="Value" String="V"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Disponible"/>
+                            <PropertyValue Property="Value" String="D"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
