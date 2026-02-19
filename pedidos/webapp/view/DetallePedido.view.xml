@@ -1,0 +1,157 @@
+<mvc:View
+    controllerName="pedidos.controller.DetallePedido"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:uxap="sap.uxap"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+    <f:DynamicPage
+        id="detallePedidoPage"
+        class="sapUiResponsiveContentPadding">
+
+        <!-- ================= TITLE ================= -->
+        <f:title>
+            <f:DynamicPageTitle>
+
+                <f:navigationActions>
+                    <Button
+                        icon="sap-icon://nav-back"
+                        press="onNavBack"/>
+                </f:navigationActions>
+
+                <f:heading>
+                    <Title text="Pedido {Id}" level="H1"/>     
+                </f:heading>
+
+                <f:actions>
+                    <Button
+                        id="btnEditarPedido"
+                        text="Editar"
+                        press="onEditPress"/>
+
+                    <Button
+                        id="btnGuardarPedido"
+                        text="Guardar"
+                        type="Emphasized"
+                        enabled="false"
+                        press="onGuardarPedido"/>
+
+                    <Button
+                        id="btnProcesarPedido"
+                        text="Procesar"
+                        press="onProcesarPedido"/>
+
+                    <Button
+                        id="btnCancelarEdicion"
+                        text="Cancelar"
+                        enabled="false"
+                        press="onCancelarEdicion"/>
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- ================= CONTENT ================= -->
+        <f:content>
+
+            <uxap:ObjectPageLayout
+                useIconTabBar="false">
+
+                <!-- ======= SECCIÓN DATOS PEDIDO ======= -->
+                <uxap:sections>
+
+                    <uxap:ObjectPageSection title="Datos del pedido">
+                        <uxap:subSections>
+
+                            <uxap:ObjectPageSubSection>
+                                <form:SimpleForm
+                                    editable="false"
+                                    layout="ResponsiveGridLayout">
+
+                                    <Label text="Cliente"/>
+                                    <ComboBox
+                                        id="inputClientePedido"
+                                        editable="false"
+                                        items="{/Cliente}"
+                                        selectedKey="{Cliente_Id}">
+                                        <core:Item key="{Id}" text="{Nombre}"/>
+                                    </ComboBox>
+
+                                    <Label text="Fecha"/>
+                                    <DatePicker
+                                        id="inputFechaPedido"
+                                        editable="false"
+                                        dateValue="{Fecha_Pedido}"
+                                        displayFormat="dd/MM/yyyy"/>
+
+                                </form:SimpleForm>
+                            </uxap:ObjectPageSubSection>
+
+                        </uxap:subSections>
+                    </uxap:ObjectPageSection>
+
+                    <!-- ======= SECCIÓN LÍNEAS ======= -->
+                    <uxap:ObjectPageSection title="Líneas del pedido">
+
+                        <uxap:subSections>
+                            <uxap:ObjectPageSubSection>
+
+                                <Table
+                                    id="tablaLineas"
+                                    mode="SingleSelectMaster"
+                                    growing="true"
+                                    items="{ path: 'Lineas', parameters: { expand: 'Caja,Calibre,Producto,Variedad' }}">
+
+                                    <headerToolbar>
+                                        <OverflowToolbar>
+                                            <Title text="Líneas"/>
+                                            <ToolbarSpacer/>
+                                            <Button
+                                                id="btnAgregarLinea"
+                                                text="Nueva línea"
+                                                press="onAgregarLinea"
+                                                enabled="false"/>
+                                            <Button
+                                                id="btnEliminarLinea"
+                                                text="Eliminar"
+                                                press="onEliminarLinea"
+                                                enabled="false"/>
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+
+                                    <columns>
+                                        <Column><Text text="Producto"/></Column>
+                                        <Column><Text text="Variedad"/></Column>
+                                        <Column><Text text="Caja"/></Column>
+                                        <Column><Text text="Calibre"/></Column>
+                                        <Column hAlign="End"><Text text="Kilos"/></Column>
+                                    </columns>
+
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{Producto/Nombre}"/>
+                                                <Text text="{Variedad/Nombre}"/>
+                                                <Text text="{Caja/Nombre}"/>
+                                                <Text text="{Calibre/Nombre}"/>
+                                                <ObjectNumber number="{Kilos}" unit="kg"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+
+                                </Table>
+
+                            </uxap:ObjectPageSubSection>
+                        </uxap:subSections>
+
+                    </uxap:ObjectPageSection>
+
+                </uxap:sections>
+
+            </uxap:ObjectPageLayout>
+
+        </f:content>
+
+    </f:DynamicPage>
+</mvc:View>

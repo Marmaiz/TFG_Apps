@@ -1,0 +1,78 @@
+<mvc:View
+    controllerName="produccion.controller.ListadoPedidosPorProcesar"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core">
+
+    <Page
+        id="pageListadoPedidosPorProcesar"
+        class="sapUiContentPadding">
+
+        <!-- Content: tabla responsive -->
+        <content>
+            <VBox class="sapUiSmallMargin">
+
+                <Table
+                    id="tablaPedidosPorProcesar"
+                    inset="false"
+                    headerText="Pedidos Pendientes"
+                    mode="SingleSelectMaster"
+                    items="{
+                        path: '/Pedido',
+                        parameters: {expand: 'Cliente,Estado'},
+                        filters: [{ path: 'Estado_code', operator: 'EQ', value1: 'P' }],
+                        sorter: { path: 'Fecha_Pedido', descending: true }
+                    }">
+
+                    <headerToolbar>
+                        <Toolbar>
+                            <Title text="Pedidos Pendientes"/>
+                            <ToolbarSpacer/>
+                            <SearchField
+                                width="300px"
+                                placeholder="Buscar por cliente..."
+                                liveChange="onSearch"/>
+                        </Toolbar>
+                    </headerToolbar>
+
+                    <columns>
+                        <Column>
+                            <Text text="Pedido"/>
+                        </Column>
+                        <Column>
+                            <Text text="Cliente"/>
+                        </Column>
+                        <Column>
+                            <Text text="Fecha"/>
+                        </Column>
+                        <Column>
+                            <Text text="Estado"/>
+                        </Column>
+                        <Column>
+                            <Text text="Acciones"/>
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem type="Active" press="onGestionar">
+                            <cells>
+                                <Text text="{Id}"/>
+                                <Text text="{Cliente/Nombre}"/>
+                                <Text text="{
+                                    path: 'Fecha_Pedido',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: { pattern: 'dd/MM/yyyy' }
+                                }"/>
+                                <Text text="{Estado/name}"/>
+                                <Button
+                                    icon="sap-icon://navigation-right-arrow"
+                                    press="onGestionar"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

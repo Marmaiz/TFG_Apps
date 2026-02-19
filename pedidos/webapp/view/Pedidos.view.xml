@@ -1,0 +1,140 @@
+<mvc:View
+    controllerName="pedidos.controller.Pedidos"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:c="sap.ui.core">
+
+    <f:DynamicPage
+        id="pagePedidos"
+        class="sapUiResponsiveContentPadding">
+
+        <!-- ================= TITLE ================= -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>title}" level="H1"/>
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- ================= CONTENT ================= -->
+        <f:content>
+
+            <!-- ============== ICON TAB BAR ============== -->
+            <IconTabBar
+                id="idIconTabBarPedidos"
+                expandable="false"
+                select="onTabSelect"
+                class="sapUiContentPadding">
+
+                <items>
+                    <IconTabFilter key="ALL" text="Todos" icon="sap-icon://list"/>
+                    <IconTabFilter key="C" text="Creados" icon="sap-icon://add"/>
+                    <IconTabFilter key="P" text="Pendientes" icon="sap-icon://pending"/>
+                    <IconTabFilter key="F" text="Finalizados" icon="sap-icon://complete"/>
+                </items>
+
+                <!-- ================= TABLE ================= -->
+                <content>
+
+                    <Table
+                        id="tablaPedidos"
+                        mode="SingleSelectLeft"
+                        growing="true"
+                        growingScrollToLoad="true"
+                        sticky="ColumnHeaders,HeaderToolbar"
+                        items="{
+                            path: '/Pedido',
+                            parameters: {
+                                expand: 'Cliente,Estado',
+                                sorter: {
+                                    path: 'Fecha_Pedido',
+                                    descending: true
+                                }
+                            }
+                        }">
+
+                        <!-- ======== HEADER TOOLBAR ======== -->
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <Title text="Pedidos" level="H2"/>
+                                <ToolbarSpacer/>
+                                <Button
+                                    text="Crear"
+                                    type="Emphasized"
+                                    press="onCrearPedido"/>
+                                <Button
+                                    text="Procesar"
+                                    press="onProcesarPedidos"/>
+                                <Button
+                                    text="Eliminar"
+                                    type="Reject"
+                                    press="onEliminarPedido"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <!-- ========== COLUMNS ========== -->
+                        <columns>
+
+                            <Column minScreenWidth="Tablet" demandPopin="true">
+                                <Text text="Pedido"/>
+                            </Column>
+
+                            <Column minScreenWidth="Tablet" demandPopin="true">
+                                <Text text="Cliente"/>
+                            </Column>
+
+                            <Column minScreenWidth="Desktop" demandPopin="true">
+                                <Text text="Fecha"/>
+                            </Column>
+
+                            <Column>
+                                <Text text="Estado"/>
+                            </Column>
+
+                        </columns>
+
+                        <!-- ========== ROW TEMPLATE ========== -->
+                        <items>
+                            <ColumnListItem
+                                type="Navigation"
+                                press="onDetail">
+
+                                <cells>
+
+                                    <ObjectIdentifier
+                                        title="{Id}"/>
+
+                                    <Text
+                                        text="{Cliente/Nombre}"/>
+
+                                    <Text
+                                        text="{
+                                            path: 'Fecha_Pedido',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: { pattern: 'dd/MM/yyyy' }
+                                        }"/>
+
+                                    <ObjectStatus
+                                        text="{Estado/name}"
+                                        state="{
+                                            path: 'Estado_code',
+                                            formatter: '.formatter.estadoColor'
+                                        }"/>
+
+                                </cells>
+
+                            </ColumnListItem>
+                        </items>
+
+                    </Table>
+
+                </content>
+
+            </IconTabBar>
+
+        </f:content>
+
+    </f:DynamicPage>
+</mvc:View>

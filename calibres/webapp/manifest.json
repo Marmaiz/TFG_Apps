@@ -141,8 +141,7 @@
                   }
                 }
               },
-              "initialLoad": "Enabled",
-              "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#table"
+              "initialLoad": "Enabled"
             }
           }
         },

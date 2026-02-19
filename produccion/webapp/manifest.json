@@ -1,0 +1,141 @@
+{
+  "_version": "1.81.0",
+  "sap.app": {
+    "id": "produccion",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.1",
+      "toolsId": "1331a9d7-f678-4522-a566-5f19bdaf3800"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v2/pedidos/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "produccion-display": {
+          "semanticObject": "produccion",
+          "action": "display",
+          "title": "{{produccion-display.flpTitle}}",
+          "subTitle": "{{produccion-display.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.144.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "produccion.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "produccion.view",
+        "async": true,
+        "viewPath": "produccion.view"
+      },
+      "routes": [
+        {
+          "name": "RoutePedidos",
+          "pattern": ":?query:",
+          "target": [
+            "ListadoPedidosPorProcesar"
+          ]
+        },
+        {
+          "name": "ProcesarPedido",
+          "pattern": "ProcesarPedido/{Id}",
+          "target": [
+            "ProcesarPedido"
+          ]
+        }
+      ],
+      "targets": {
+        "ListadoPedidosPorProcesar": {
+          "name": "ListadoPedidosPorProcesar"
+        },
+        "ProcesarPedido": {
+          "name": "ProcesarPedido"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "produccion.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "produccion"
+  }
+}

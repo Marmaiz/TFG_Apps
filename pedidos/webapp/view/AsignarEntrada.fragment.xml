@@ -1,0 +1,46 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:smartForm="sap.ui.comp.smartform"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:core="sap.ui.core"
+    xmlns:smartMultiInput="sap.ui.comp.smartmultiinput"
+    >
+    <Dialog title="{i18n>AsignarEntrada}" contentWidth="400px" contentHeight="auto">
+        <VBox >
+            <form:SimpleForm editable="false" layout="ColumnLayout" title="" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="3" columnsL="3" columnsM="3" singleContainerFullSize="false">
+                <form:content>
+                    
+                    <Label text="{i18n>Entrada}" required="true"   />  
+                    <Input                        
+                        showValueHelp="true"
+                        valueHelpRequest="onValueHelpPress"
+                        width="100%" 
+                        value="{AsignarEntradaModel>/Entrada_Id}"
+                        >                       
+                    </Input>         
+
+                    <Label text="{i18n>Kilosdispo}" required="true"/>
+                    <Text text="{AsignarEntradaModel>/Kilos_Disponibles}" />                      
+
+                    <Label text="{i18n>KilosUtilizados}" required="true"/>
+                    <Input value="{AsignarEntradaModel>/Kilos_Usados}" type="Number"/>                     
+                    
+                    <Label text="{i18n>KilosMerma}" required="true"/>
+                    <Input value="{AsignarEntradaModel>/Kilos_Merma}" type="Number"/>                     
+
+                    <Label text="{i18n>Descripción}" required="true"/>
+                    <TextArea maxLength="500" showExceededText="true" value="{AsignarEntradaModel>/description}" rows="4"/>
+
+                </form:content>
+            </form:SimpleForm>
+        </VBox>
+        <beginButton>
+            <Button text="{i18n>Cancel}" type="Reject" press="onCancelDialog" />
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>Save}" type="Success" press="onConfirmAsignarEntrada" />
+        </endButton>
+    </Dialog>
+
+</core:FragmentDefinition>

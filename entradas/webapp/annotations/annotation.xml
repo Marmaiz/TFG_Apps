@@ -55,6 +55,11 @@
                             <PropertyValue Property="ID" String="i18ninformacin"/>
                             <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#i18ninformacin"/>
                         </Record>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Lineas"/>
+                            <PropertyValue Property="ID" String="Lineas"/>
+                            <PropertyValue Property="Target" AnnotationPath="toLineas/@UI.LineItem#Lineas"/>
+                        </Record>
                     </Collection>
                 </Annotation>
                 <Annotation Term="UI.LineItem">
@@ -352,6 +357,28 @@
             <Annotations Target="PedidosService.Socio/Id">
                 <Annotation Term="Common.Text" Path="Nombre">
                     <Annotation Term="UI.TextArrangement" EnumMember="UI.TextArrangementType/TextOnly"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="PedidosService.Trazabilidad">
+                <Annotation Term="UI.LineItem" Qualifier="Lineas">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Linea/Pedido_Id"/>
+                            <PropertyValue Property="Label" String="Pedido_Id"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Linea_Id"/>
+                            <PropertyValue Property="Label" String="Linea_Id"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Kilos_Usados"/>
+                            <PropertyValue Property="Label" String="Kilos_Usados"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="Kilos_Merma"/>
+                            <PropertyValue Property="Label" String="Kilos_Merma"/>
+                        </Record>
+                    </Collection>
                 </Annotation>
             </Annotations>
         </Schema>

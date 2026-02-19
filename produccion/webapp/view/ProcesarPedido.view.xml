@@ -1,0 +1,174 @@
+<mvc:View
+	controllerName="produccion.controller.ProcesarPedido"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m" 
+	xmlns:t="sap.ui.table"
+	xmlns:u="sap.uxap">
+
+
+	<u:ObjectPageLayout
+		id="ObjectPageLayoutProcesarPedidos"
+		subSectionLayout="TitleOnLeft"
+		showTitleInHeaderContent="true"
+		upperCaseAnchorBar="false">
+
+			<u:headerTitle>
+				<u:ObjectPageDynamicHeaderTitle>
+
+				<u:heading>
+					<Title
+						text="Pedido {Id}"
+						wrapping="true"/>
+           		</u:heading>
+
+					<u:actions>
+						<Button text="Finalizar" type="Emphasized" press="onfinalizarPedido"/>
+						<OverflowToolbarButton icon="sap-icon://action" type="Transparent" text="Share" tooltip="action"/>
+					</u:actions>
+
+				</u:ObjectPageDynamicHeaderTitle>
+
+			</u:headerTitle>
+
+			<u:headerContent>
+				<FlexBox wrap="Wrap" fitContainer="true" >
+					<l:VerticalLayout class="sapUiSmallMarginBeginEnd">
+					<Text text="{Cliente/Nombre}" />
+					<Text text="{
+								path: 'Fecha_Pedido',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: { pattern: 'dd/MM/yyyy' }
+								}"
+							/> 
+				</l:VerticalLayout>
+				</FlexBox >
+			</u:headerContent>
+
+			<u:sections>
+				<u:ObjectPageSection titleUppercase="false" title="Lineas del pedido">
+					<u:subSections>
+						<u:ObjectPageSubSection titleUppercase="false">
+							<t:Table 
+								rows="{ path: 'Lineas', parameters: {expand: 'Caja, Calibre, Producto, Variedad'}}" 
+									selectionMode="None"
+									ariaLabelledBy="title">
+
+									<t:columns>
+									
+										<t:Column>
+											<Label text="Id" />
+											<t:template>
+												<Text text="{Id}" wrapping="false"/>
+											</t:template>
+										</t:Column>
+
+										<t:Column>
+											<Label text="Producto" />
+											<t:template>
+												<Text text="{Producto/Nombre}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Variedad" />
+											<t:template>
+												<Text text="{Variedad/Nombre}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Caja" />
+											<t:template>
+												<Text text="{Caja/Nombre}" wrapping="false"/>
+											</t:template>
+										</t:Column>		
+
+										<t:Column>
+											<Label text="Calibre" />
+											<t:template>
+												<Text text="{Calibre/Nombre}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Kilos" />
+											<t:template>
+												<Text text="{Kilos}" wrapping="false"/>								
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Entradas" />
+											<t:template>
+												<Button
+													text="Añadir entrada"
+													icon="sap-icon://navigation-right-arrow"
+													press="onAsignarEntrada"
+												/>							
+											</t:template>
+										</t:Column>	
+
+									</t:columns>
+							
+							</t:Table>	
+						</u:ObjectPageSubSection>
+					</u:subSections>
+				</u:ObjectPageSection>
+
+				<u:ObjectPageSection titleUppercase="false" title="Trazabilidad">
+					<u:subSections>
+						<u:ObjectPageSubSection titleUppercase="false">
+							<t:Table							 
+							 	id="tablaTrazabilidad"
+								rows="{ path: '/Trazabilidad', parameters: {expand: 'Linea,Entrada($expand=Socio)'}}" 
+									selectionMode="None"
+									ariaLabelledBy="title">
+
+									<t:columns>
+									
+										<t:Column>
+											<Label text="Linea" />
+											<t:template>
+												<Text text="{Linea/Id}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Entrada" />
+											<t:template>
+												<Text text="{Entrada/Id}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Socio" />
+											<t:template>
+												<Text text="{Entrada/Socio/Nombre}" wrapping="false"/>
+											</t:template>
+										</t:Column>	
+
+										<t:Column>
+											<Label text="Kilos" />
+											<t:template>
+												<Text text="{Kilos_Usados}" wrapping="false"/>								
+											</t:template>
+										</t:Column>	
+
+									</t:columns>
+							
+							</t:Table>
+
+						</u:ObjectPageSubSection>
+					</u:subSections>
+				</u:ObjectPageSection>
+			</u:sections>
+
+			
+	</u:ObjectPageLayout>
+
+	
+
+</mvc:View>

@@ -1,0 +1,52 @@
+<core:FragmentDefinition 
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m" >
+
+    <TableSelectDialog
+        id="dlgSeleccionarEntrada"
+        title="Seleccionar entrada"
+        noDataText="No hay entradas disponibles"
+        search="onBuscarEntrada"
+        confirm="onSelectEntrada"
+        cancel="onCancelarEntrada"
+        items="{
+            path: '/Entrada',
+            parameters: {expand: 'Socio, Producto, Variedad'}
+        }">
+
+		<columns>
+            <Column>
+                <header>
+                    <Text text="Socio"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Producto"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Variedad"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Kilos disponibles"/>
+                </header>
+            </Column>
+        </columns>
+
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{Socio/Nombre}" />
+                    <Text text="{Producto/Nombre}" />
+                    <Text text="{Variedad/Nombre}" />
+                    <Text text="{Kilos_disponibles}" />
+                </cells>
+            </ColumnListItem>
+        </items>
+
+    </TableSelectDialog>
+</core:FragmentDefinition>

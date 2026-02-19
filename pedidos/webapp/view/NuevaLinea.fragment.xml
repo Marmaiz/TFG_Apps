@@ -1,0 +1,62 @@
+<core:FragmentDefinition 
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m" 
+	xmlns:t="sap.ui.table">
+
+    <Dialog id="dlgNuevaLinea" title="Nueva Línea" class="sapUiContentPadding">
+
+        <VBox>
+            <Label text="Producto"/>
+            <ComboBox
+                items="{ path: '/Producto'}"
+                selectedKey="{NuevaLineaModel>/Producto_Id}"
+                selectionChange=".onProductoSeleccionado"
+                width="100%">
+                <core:Item key="{Id}" text="{Nombre}" />
+            </ComboBox>
+
+            <Label text="Variedad"/>
+            <ComboBox
+                id="cbVariedad"
+                items="{ path: '/Variedad'}"
+                selectedKey="{NuevaLineaModel>/Variedad_Id}"
+                width="100%"
+                editable="false">
+                <core:Item key="{Id}" text="{Nombre}" />
+            </ComboBox>
+
+            <Label text="Calibre"/>
+            <ComboBox
+                items="{ path: '/Calibre' }"
+                selectedKey="{NuevaLineaModel>/Calibre_Id}"
+                width="100%">
+                <core:Item key="{Id}" text="{Nombre}" />
+            </ComboBox>
+
+            <Label text="Caja"/>
+            <ComboBox
+                items="{ path: '/Caja' }"
+                selectedKey="{NuevaLineaModel>/Caja_Id}"
+                width="100%">
+                <core:Item key="{Id}" text="{Nombre}" />
+            </ComboBox>
+
+            <Label text="Kilos"/>
+            <Input value="{NuevaLineaModel>/Kilos}" type="Number"/>
+
+        </VBox>
+
+        <beginButton>
+            <Button text="Añadir" press=".onConfirmarNuevaLinea" />
+        </beginButton>
+
+        <endButton>
+            <Button text="Cancelar" press=".onCancelarNuevaLinea" />
+        </endButton>
+
+    </Dialog>
+
+</core:FragmentDefinition>
