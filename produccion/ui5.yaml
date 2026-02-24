@@ -18,6 +18,7 @@ server:
         backend:
           - path: /odata
             url: https://83b6ec9dtrial-dev-tfg-v2-srv.cfapps.us10-001.hana.ondemand.com
+          # url: https://port4004-workspaces-ws-zu0rc.us10.trial.applicationstudio.cloud.sap/
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

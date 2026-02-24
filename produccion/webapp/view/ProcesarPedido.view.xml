@@ -20,7 +20,7 @@
 
 				<u:heading>
 					<Title
-						text="Pedido {Id}"
+						text="Pedido {Id_Display}"
 						wrapping="true"/>
            		</u:heading>
 
@@ -61,7 +61,7 @@
 										<t:Column>
 											<Label text="Id" />
 											<t:template>
-												<Text text="{Id}" wrapping="false"/>
+												<Text text="{Id_Display}" wrapping="false"/>
 											</t:template>
 										</t:Column>
 
@@ -132,7 +132,7 @@
 										<t:Column>
 											<Label text="Linea" />
 											<t:template>
-												<Text text="{Linea/Id}" wrapping="false"/>
+												<Text text="{Linea/Id_Display}" wrapping="false"/>
 											</t:template>
 										</t:Column>	
 

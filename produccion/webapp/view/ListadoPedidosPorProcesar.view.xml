@@ -56,7 +56,7 @@
                     <items>
                         <ColumnListItem type="Active" press="onGestionar">
                             <cells>
-                                <Text text="{Id}"/>
+                                <Text text="{Id_Display}"/>
                                 <Text text="{Cliente/Nombre}"/>
                                 <Text text="{
                                     path: 'Fecha_Pedido',
