@@ -23,7 +23,7 @@
                 </f:navigationActions>
 
                 <f:heading>
-                    <Title text="Pedido {Id}" level="H1"/>     
+                    <Title text="Pedido {Id_Display}" level="H1"/>     
                 </f:heading>
 
                 <f:actions>
@@ -130,6 +130,7 @@
                                     </headerToolbar>
 
                                     <columns>
+                                        <Column><Text text="Linea"/></Column>
                                         <Column><Text text="Producto"/></Column>
                                         <Column><Text text="Variedad"/></Column>
                                         <Column><Text text="Caja"/></Column>
@@ -140,6 +141,7 @@
                                     <items>
                                         <ColumnListItem>
                                             <cells>
+                                                <Text text="{NumLinea}"/>
                                                 <Text text="{Producto/Nombre}"/>
                                                 <Text text="{Variedad/Nombre}"/>
                                                 <Text text="{Caja/Nombre}"/>

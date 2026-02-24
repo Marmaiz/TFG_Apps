@@ -236,6 +236,8 @@ sap.ui.define([
             }
           }
         );
+      }else{
+         this.onHacerEditable(true);
       }
     },
 

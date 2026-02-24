@@ -104,7 +104,7 @@
                                 <cells>
 
                                     <ObjectIdentifier
-                                        title="{Id}"/>
+                                        title="{Id_Display}"/>                                    
 
                                     <Text
                                         text="{Cliente/Nombre}"/>
