@@ -9,7 +9,8 @@
 
     <f:DynamicPage
         id="detallePedidoPage"
-        class="sapUiResponsiveContentPadding">
+        class="sapUiResponsiveContentPadding"
+         showFooter="true">
 
         <!-- ================= TITLE ================= -->
         <f:title>
@@ -32,25 +33,33 @@
                         press="onEditPress"/>
 
                     <Button
+                        id="btnProcesarPedido"
+                        text="Procesar"
+                        press="onProcesarPedido"/>
+
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+                 <!-- ================= FOOTER ================= -->
+		<f:footer>
+			<OverflowToolbar id="otbFooter">
+				<ToolbarSpacer/>
+				    <Button
                         id="btnGuardarPedido"
                         text="Guardar"
                         type="Emphasized"
                         enabled="false"
-                        press="onGuardarPedido"/>
-
-                    <Button
-                        id="btnProcesarPedido"
-                        text="Procesar"
-                        press="onProcesarPedido"/>
+                        press="onGuardarPedido"/>                   
 
                     <Button
                         id="btnCancelarEdicion"
                         text="Cancelar"
                         enabled="false"
                         press="onCancelarEdicion"/>
-                </f:actions>
-            </f:DynamicPageTitle>
-        </f:title>
+
+			</OverflowToolbar>
+		</f:footer>
 
         <!-- ================= CONTENT ================= -->
         <f:content>
@@ -152,6 +161,8 @@
             </uxap:ObjectPageLayout>
 
         </f:content>
+
+
 
     </f:DynamicPage>
 </mvc:View>
