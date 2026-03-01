@@ -258,7 +258,7 @@ sap.ui.define([
       };
 
       oModel.create("/Trazabilidad", body, {
-        success: function (oData, resp) {
+        success: function () {
           that.getView().setBusy(false);
           that._oDialogAsignarEntrada.setBusy(false);
           that._oDialogAsignarEntrada.close();
