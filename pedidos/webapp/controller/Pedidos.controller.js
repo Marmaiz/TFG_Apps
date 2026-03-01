@@ -47,33 +47,60 @@ sap.ui.define([
 
         },
 
-        onConfirmarNuevoPedido: function () {
-            /* var oView = this.getView();
+        onConfirmarNuevoPedido: function (oEvent) {
             var oModelNuevoPedido = this.getView().getModel("NuevoPedidoModel");
-            var oData = oModelNuevoPedido.getData();
-            console.log(oData) */
-            const oModel = this.getView().getModel();     // OData V2 model
-            const oData = this.getView().getModel("NuevoPedidoModel").getData();
-            const that = this;
+            var oDataNuevoPedido = oModelNuevoPedido.getData();
+            var correcto = false;
 
-            oModel.create("/Pedido", oData, {
-                success: function () {
-                    MessageToast.show("Pedido creado correctamente");
+            //comprobamos los datos obligatorios
+            if (oDataNuevoPedido.Cliente_Id && oDataNuevoPedido.Fecha_Pedido) {
+                correcto = true;
+            }
 
-                    that._oDialogNuevoPedido.close();
-
-                    // Refrescar tabla
-                    oModel.refresh(true);
-                },
-                error: function (oError) {
-                    console.error("Error al crear pedido", oError);
-                    MessageBox.error("No se pudo crear el pedido");
-                }
-            });
-
-            this._oDialogNuevoPedido.close();
+            if (correcto) {
+                MessageBox.confirm(this.getView().getModel("i18n").getProperty("confirm_crearPedido"), {
+                    onClose: function (oAction) {
+                        if (oAction === MessageBox.Action.OK) {
+                            this._submitCrearPedido();
+                        }
+                    }.bind(this)
+                });
+            }
+            else {
+                MessageBox.error(this.getView().getModel("i18n").getProperty("error_requiredfields"))
+            }
         },
 
+        _submitCrearPedido: function () {
+            var oModel = this.getView().getModel();     // OData V2 model
+            var oData = this.getView().getModel("NuevoPedidoModel").getData();
+            var that = this;
+
+            this.getView().setBusy(true);
+            this.getView().setBusyIndicatorDelay(0);
+            this._oDialogNuevoPedido.setBusy(true);
+            this._oDialogNuevoPedido.setBusyIndicatorDelay(0);
+
+            oModel.create("/Pedido", oData, {
+                success: function () {                   
+                    that.getView().setBusy(false);
+                    that._oDialogNuevoPedido.setBusy(false);
+                    that._oDialogNuevoPedido.close();
+                    MessageToast.show(that.getView().getModel("i18n").getProperty("success_crearPedido"));
+                    
+                    // Refrescar tabla
+                    oModel.refresh(true, true);
+                },
+                error: function (oError) {
+                    if (oError && oError.responseText) {
+                        var oErrorBody = JSON.parse(oError.responseText);
+                        MessageBox.error(oErrorBody.oError.code + " - " + oErrorBody.oError.message.value)
+                    }
+                    that.getView().setBusy(false);
+                    that._oDialogNuevoPedido.setBusy(false);
+                }
+            });
+        },
 
         onCancelarNuevoPedido: function () {
             this._oDialogNuevoPedido.close();

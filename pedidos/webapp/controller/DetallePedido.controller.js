@@ -103,37 +103,56 @@ sap.ui.define([
      * Metodo para realizar la consulta a la BD y crear la linea
      */
     onConfirmarNuevaLinea: function () {
-      /*       var oView = this.getView();
-            var oNuevaLineaModel = this.getView().getModel("NuevaLineaModel");
-            var oData = oNuevaLineaModel.getData();
-            console.log(oData)
-            this._oDialogNuevaLinea.close(); */
+      var oNuevaLineaModel = this.getView().getModel("NuevaLineaModel");
+      var oDataNuevaLinea = oNuevaLineaModel.getData();
+      var correcto = false;
 
-      /* solucion de chaty*/
-      const oModel = this.getView().getModel();     // OData V2 model
-      const oData = this.getView().getModel("NuevaLineaModel").getData();
+      //comprobamos los datos obligatorios
+      if (oDataNuevaLinea.Producto_Id && oDataNuevaLinea.Variedad_Id && oDataNuevaLinea.Calibre_Id && oDataNuevaLinea.Caja_Id && oDataNuevaLinea.Kilos) {
+          correcto = true;
+      }
 
-      // Obtenemos el path del Pedido actual
-      //const binding = oView.getElementBinding();
-      // const pedidoPath = binding.getPath();  // "/Pedido(Id=guid'...')"
+      if (correcto) {
+          MessageBox.confirm(this.getView().getModel("i18n").getProperty("confirm_crearLinea"), {
+              onClose: function (oAction) {
+                  if (oAction === MessageBox.Action.OK) {
+                      this._submitCrearLinea();
+                  }
+              }.bind(this)
+          });
+      }
+      else {
+          MessageBox.error(this.getView().getModel("i18n").getProperty("error_requiredfields"))
+      }     
+    },
 
-      // Path para crear la línea (sub-collection)
-      //const lineaPath = pedidoPath + "/Linea";      
-      const that = this;
+    _submitCrearLinea: function(){
+      var oModel = this.getView().getModel();     // OData V2 model
+      var oData = this.getView().getModel("NuevaLineaModel").getData();
+      var that = this;
 
-      //oModel.create(lineaPath, oData, {
+      this.getView().setBusy(true);
+      this.getView().setBusyIndicatorDelay(0);
+      this._oDialogNuevaLinea.setBusy(true);
+      this._oDialogNuevaLinea.setBusyIndicatorDelay(0); 
+
       oModel.create("/Linea", oData, {
-        success: function (oCreatedData) {
-          MessageToast.show("Línea creada correctamente");
+        success: function () {
+          that.getView().setBusy(false);
+          that._oDialogNuevaLinea.setBusy(false);
           that._oDialogNuevaLinea.close();
+          MessageToast.show(that.getView().getModel("i18n").getProperty("success_crearLinea"));
 
           // Refrescar los datos del Pedido entero
-          //binding.refresh(true);
-          oModel.refresh(true);
+          oModel.refresh(true, true);
         },
         error: function (oError) {
-          console.error("Error al crear línea", oError);
-          MessageBox.error("No se pudo crear la línea");
+          if (oError && oError.responseText) {
+              var oErrorBody = JSON.parse(oError.responseText);
+              MessageBox.error(oErrorBody.oError.code + " - " + oErrorBody.oError.message.value)
+          }
+          that.getView().setBusy(false);
+          that._oDialogNuevoPedido.setBusy(false);
         }
       });
     },
