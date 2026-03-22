@@ -24,7 +24,7 @@
         }
       },
       "mainService": {
-        "uri": "/odata/v4/master-data/",
+        "uri": "/service/MasterDataService/",
         "type": "OData",
         "settings": {
           "annotations": [

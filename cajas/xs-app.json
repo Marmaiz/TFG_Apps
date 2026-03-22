@@ -3,11 +3,11 @@
   "authenticationMethod": "route",
   "routes": [
      {
-      "source": "^/?odata/(.*)$",
-      "target": "/odata/$1",
-      "destination": "srv-api",
+      "source": "^/service/(.*)$",
+      "target": "/service/$1",
+      "destination": "MGMTFG-app-srv",
       "authenticationType": "xsuaa",
-      "csrfProtection": true
+      "csrfProtection": false
     },
     {
       "source": "^/resources/(.*)$",

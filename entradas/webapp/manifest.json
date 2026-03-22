@@ -24,7 +24,7 @@
         }
       },
       "mainService": {
-        "uri": "/odata/v4/pedidos/",
+        "uri": "/service/PedidosService/",
         "type": "OData",
         "settings": {
           "annotations": [
